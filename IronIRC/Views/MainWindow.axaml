@@ -3,6 +3,11 @@
         xmlns:vm="using:IronIRC.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:np="https://np.com/visuals"
+        xmlns:views="clr-namespace:IronIRC.Views"
+        np:DockAttachedProperties.TheDockManager="{DynamicResource TheDockManager}"
+        np:DockAttachedProperties.DockChildWindowOwner="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        np:DockAttachedProperties.WindowId="MainWindow"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="IronIRC.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -14,7 +19,118 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <np:DockManager x:Key="TheDockManager"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Window.Styles>
+        <Style Selector="MenuItem.separator">
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="BorderThickness" Value="1 0 0 0" />
+            <Setter Property="BorderBrush" Value="#f3f2f1" />
+            <Setter Property="Padding" Value="1 0" />
+            <Setter Property="Margin" Value="0 5" />
+            <Setter Property="IsEnabled" Value="False" />
+        </Style>
+    </Window.Styles>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <Grid Margin="5" RowDefinitions="Auto,Auto,*">
+        <Menu Grid.Row="0">
+            <MenuItem Header="_IronIRC">
+                <MenuItem Header="_About" x:Name="AboutBtn" Click="AboutBtn_OnClick" />
+            </MenuItem>
+            <MenuItem Header="_File">
+                 <MenuItem Header="_Select Server" />
+                 <Separator />
+                 <MenuItem Header="_Connect" />
+                 <MenuItem Header="_Disconnect" />
+                 <Separator />
+                 <MenuItem Header="_Exit" />
+            </MenuItem>
+            
+            <MenuItem Header="_View">
+                <MenuItem Header="_Menu" />
+                <MenuItem Header="_Toolbar" />
+                <MenuItem Header="_Server Tree" />
+            </MenuItem>
+            
+            <MenuItem Header="F_avorites">
+                <MenuItem Header="_Manage Favorites" />
+                <Separator />
+                <MenuItem Header="_History" />
+                <Separator />
+                <!-- ... -->
+            </MenuItem>
+            
+            <MenuItem Header="_Tools">
+                <MenuItem Header="_Channel List..." />
+                <Separator />
+                <MenuItem Header="_Send File..." />
+                <Separator />
+                <MenuItem Header="_Private Message" />
+                <Separator />
+                <MenuItem Header="_Do Not Disturb" />
+                <Separator />
+                <MenuItem Header="_Options..." />
+            </MenuItem>
+            
+            <MenuItem Header="_Commands">
+                <MenuItem Header="_Join channel..." />
+                <MenuItem Header="_Part channel..." />
+                <MenuItem Header="_Whois..." />
+                <MenuItem Header="_Away">
+                    <MenuItem Header="_Go away" />
+                    <MenuItem Header="_Come back" />
+                </MenuItem>
+                <MenuItem Header="_Invite user..." />
+                <MenuItem Header="_Ban user..." />
+                <MenuItem Header="_Kick user..." />
+                <MenuItem Header="_Ignore user..." />
+                <MenuItem Header="_Change nick..." />
+            </MenuItem>
+        </Menu>
+        
+        <Menu Grid.Row="1">
+            <MenuItem>
+                <MenuItem.Header>
+                    <Image Width="16" Height="16" Source="avares://IronIRC/Assets/Icons/connected.png" />
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Classes="separator" />
+            <MenuItem>
+                <MenuItem.Header>
+                    <Image Width="16" Height="16" Source="avares://IronIRC/Assets/Icons/tools.png" />
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem Classes="separator" />
+            <MenuItem>
+                <MenuItem.Header>
+                    <Image Width="16" Height="16" Source="avares://IronIRC/Assets/Icons/favorite.png" />
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem>
+                <MenuItem.Header>
+                    <Image Width="16" Height="16" Source="avares://IronIRC/Assets/Icons/more-details.png" />
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        
+        <np:RootDockGroup Grid.Row="2" DockId="RootGroup" np:DockAttachedProperties.TheDockManager="{StaticResource TheDockManager}">
+            <np:StackDockGroup TheOrientation="Horizontal" InitialSizeCoefficients="180">
+                <np:DockItem Header="Server Tree">
+                    <TextBlock>Serverz</TextBlock>
+                </np:DockItem>
+                <np:TabbedDockGroup x:Name="MainChatView">
+                    <np:DockItem Header="Server Chat" DockId="LeftTop1" FloatingSize="500,500" CanClose="False">
+                        <views:ChatView />
+                    </np:DockItem>
+                </np:TabbedDockGroup>
+            </np:StackDockGroup>
+        </np:RootDockGroup>
+    </Grid>
 
 </Window>

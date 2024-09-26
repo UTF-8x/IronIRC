@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:IronIRC.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="viewModels:ChatViewVM"
+             x:Class="IronIRC.Views.ChatView">
+    <Design.DataContext>
+        <viewModels:ChatViewVM />
+    </Design.DataContext>
+    
+    <UserControl.Styles>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="White" />
+        </Style>
+        
+        <Style Selector="ListBox > ListBoxItem">
+            <Setter Property="Padding" Value="3, 2" />
+        </Style>
+        
+        <Style Selector="TextBox.chatinput">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderBrush" Value="#f3f2f1" />
+        </Style>
+    </UserControl.Styles>
+    
+    <Grid RowDefinitions="Auto,*,Auto" ColumnDefinitions="*,Auto">
+        <Border Grid.Row="0" Grid.Column="0" Background="#f3f2f1" Padding="10">
+            <TextBlock>This is a demo channel for demoing IronIRC</TextBlock>
+        </Border>
+        
+        <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Padding="5" BorderBrush="#f3f2f1" BorderThickness="1 0 0 0">
+            <ListBox>
+                <ListBoxItem>@utf8x</ListBoxItem>
+                <ListBoxItem>demo</ListBoxItem>
+                <ListBoxItem>jeff</ListBoxItem>
+            </ListBox>
+        </Border>
+        
+        <Border Grid.Row="1" Grid.Column="0">
+            <ListBox Padding="10">
+                <ListBoxItem Foreground="Green">* Now talking in #opers</ListBoxItem>
+                <ListBoxItem Foreground="Green">* 127.0.0.1 sets mode: +nt</ListBoxItem>
+                <ListBoxItem Foreground="Green">* utf8x sets mode: +i</ListBoxItem>
+                <ListBoxItem Content="&lt;@utf8x&gt; Hello There" />
+                <ListBoxItem Foreground="DarkBlue">* demo (demo@127.0.0.1) Quit (Read error)</ListBoxItem>
+                <ListBoxItem Foreground="Green">* demo (demo@127.0.0.1) has joined #opers</ListBoxItem>
+                <ListBoxItem Content="&lt;demo&gt; WTF it crashed" />
+                <ListBoxItem Content="&lt;jeff&gt; lulw" />
+            </ListBox>
+        </Border>
+        
+        <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBox Classes="chatinput" x:Name="ChatInput" KeyUp="ChatInput_OnKeyUp"/>
+        </Border>
+    </Grid>
+</UserControl>
