@@ -1,0 +1,41 @@
+name: Publish Desktop
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  WIN_PKG_PATH: 'IronIRC\bin\Release\net8.0\win-x64\publish\'
+  LINUX_PKG_PATH: 'IronIRC\bin\Release\net8.0\linux-x64\publish'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+          include-prerelease: false
+      
+      - name: Restore Nuget
+        run: dotnet restore .\IronIRC.sln
+
+      - name: Publish Win
+        run: dotnet publish .\IronIRC\IronIRC.csproj --runtime win-x64 --self-contained true -c=Release /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:PublishReadyToRun=true
+
+      - name: Build Win Zip
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: IronIRC-win-x64
+          path: ${{ env.WIN_PKG_PATH }}
+
+      - name: Publish Linux
+        run: dotnet publish .\IronIRC\IronIRC.csproj --runtime linux-x64 --self-contained true -c=Release /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true /p:PublishReadyToRun=true
+
+      - name: Build Linux Zip
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: IronIRC-linux-x64
+          path: ${{ env.LINUX_PKG_PATH }}
